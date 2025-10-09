@@ -63,5 +63,11 @@ complete_button.grid(row=3, columnspan=4, sticky="e", padx=35)
 task_listbox = tk.Listbox(root, width=50, height=15, font=("Times New Roman", 22), fg="#000000", bg="#E5DCFF", selectbackground="#7FEBAE")
 task_listbox.grid(row=4, column=0, columnspan=4, pady=40)
 
+#scrollbar for listbox
+scrollbar= tk.Scrollbar(root)
+scrollbar.grid(row=4, column=4, sticky="ns")
+task_listbox.config(yscrollcommand=scrollbar.set)
+scrollbar.config(command=task_listbox.yview)
+
 #goes at end of program
 root.mainloop()
