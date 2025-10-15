@@ -1,9 +1,11 @@
+#setup and functions -------------------------------------------------------------------------------
 import tkinter as tk
+import time
 
 #setup main window
 root = tk.Tk()
 root.title("To-Do List")
-root.geometry("600x800")
+root.geometry("620x850")
 root.configure(bg = "#0A2947")
 
 #update task counter function
@@ -48,6 +50,23 @@ def clear_completed():
         if task_listbox.get(i).startswith("✓ "):
             task_listbox.delete(i)
     update_task_count()
+
+#clock function (updates time every second)
+def update_clock():
+    current_time = time.strftime("%I:%M %p")
+    clock_label.config(text=current_time)
+    root.after(1000, update_clock)
+
+#placeholder text functions
+def add_placeholder(event):
+    if task_entry.get("1.0", "end-1c") == "":
+        task_entry.insert("1.0", "Enter your task here...")
+        task_entry.config(fg="grey")
+
+def remove_placeholder(event):
+    if task_entry.get("1.0", "end-1c") == "Enter your task here...":
+        task_entry.delete("1.0", tk.END)
+        task_entry.config(fg="#224C6E")
 
 #all GUI components -------------------------------------------------------------------------------------------------
 
@@ -95,6 +114,17 @@ scrollbar.config(command=task_listbox.yview)
 #task counter label
 task_count_label = tk.Label (root, text="Total Tasks: 0", font=("Times New Roman", 20), fg="#FFD1E5", bg="#0A2947")
 task_count_label.grid(row=5, column=0, columnspan=4, pady=10)
+
+#clock label
+clock_label = tk.Label(root, font=("Times New Roman", 20), fg="#FFFFFF", bg="#0A2947")
+clock_label.grid(row=6, column=0, columnspan=4)
+update_clock()
+
+#placeholder text setup
+task_entry.insert("1.0", "Enter your task here...")
+task_entry.config(fg="grey")
+task_entry.bind("<FocusIn>", remove_placeholder)
+task_entry.bind("<FocusOut>", add_placeholder)
 
 #key binding
 root.bind("<Return>", lambda event: get_task(), update_task_count())
